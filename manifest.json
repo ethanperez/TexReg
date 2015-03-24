@@ -1,8 +1,12 @@
 {
   "manifest_version": 2,
-  "name": "UT Syllabus",
+  "default_locale": "en",
+
+  "name": "UT Syllabi Link",
   "description": "This extension shows a link to all UT syllabi on the course registration page",
+  "author": "Ethan Perez",
   "version": "0.1",
+  
   "content_scripts": [
     {
       "matches": ["*://utdirect.utexas.edu/apps/registrar/course_schedule/*"],
