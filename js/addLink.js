@@ -47,5 +47,5 @@ $("td.course_header h2").each(function() {
   }
 
   // Set the link
-  $(this).html(ogText + '<a href="https://utdirect.utexas.edu/apps/student/coursedocs/nlogon/?semester=&department=' + dept + '&course_number=' + courseNumber + '&course_title=&unique=&instructor_first=&instructor_last=&course_type=In+Residence&search=Search" target="_blank">View Syllabi and CVs</a>');
+  $(this).append('<a href="https://utdirect.utexas.edu/apps/student/coursedocs/nlogon/?semester=&department=' + dept + '&course_number=' + courseNumber + '&course_title=&unique=&instructor_first=&instructor_last=&course_type=In+Residence&search=Search" target="_blank">View Syllabi and CVs</a>');
 });
