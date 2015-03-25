@@ -2,7 +2,7 @@
   "manifest_version": 2,
 
   "name": "UT Syllabi Link",
-  "description": "This extension shows a link to all UT syllabi on the course registration page",
+  "description": "Adds a link to course instructor past syllabi and CVs in UT course schedule.",
   "author": "Ethan Perez",
   "version": "0.1",
 
