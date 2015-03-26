@@ -1,15 +1,12 @@
-String.prototype.capitalize = function(){
-  return this.replace( /(^|\s)([a-z])/g , function(m,p1,p2){ return p1+p2.toUpperCase(); } );
-};
 
 // jQuery function to strip search string of args
 // Courtesy of http://www.sitepoint.com/url-parameters-jquery/
 function getURIParam(name) {
   var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-  if (results==null){
+  if (results == null){
     return null;
   } else {
-      return results[1] || 0;
+    return results[1] || 0;
   }
 }
 
@@ -25,6 +22,17 @@ function getDeptFromURI(uri) {
 
 dept = getDeptFromURI('fos_fl');
 
+function getCourseNumber(text) {
+  var spacedText = text.split(/\s+/)
+
+  // Now, check to see where the c# starts
+  var courseNumber;
+  if (isNaN(spacedText[1].charAt(0)) == false) {
+    return spacedText[1];
+  } else {
+    return spacedText[2];
+  }
+}
 
 
 
@@ -41,20 +49,12 @@ dept = getDeptFromURI('fos_fl');
 // Algo: check the 1st index from split: if number,
 // proceed, else, take block 2. (This is because 
 // of the two lettered depts i.e., CS == C S)
-
 $("td.course_header h2").each(function() {
   // Get the OG text
   var ogText = $(this).text();
   // Parse it for the course number
-  var spacedOgText = ogText.split(/\s+/)
-
-  // Now, check to see where the c# starts
-  var courseNumber;
-  if (isNaN(spacedOgText[1].charAt(0)) == false) {
-    courseNumber = spacedOgText[1];
-  } else {
-    courseNumber = spacedOgText[2];
-  }
+  
+  var courseNumber = getCourseNumber(ogText);
 
   // Set the link
   $(this).append('<a href="https://utdirect.utexas.edu/apps/student/coursedocs' +
@@ -66,6 +66,13 @@ $("td.course_header h2").each(function() {
                  '&course_type=In+Residence&search=Search" target="_blank">View Syllabi and CVs</a>');
 });
 
+// Capitalizes the beginning of each word
+// http://stackoverflow.com/questions/4878756
+// /javascript-how-to-capitalize-first-letter-of-each-word-like-a-2-word-city
+String.prototype.capitalize = function(){
+  return this.replace( /(^|\s)([a-z])/g , function(m,p1,p2){ return p1+p2.toUpperCase(); } );
+};
+
 // Add link to CIS
 $('td[data-th="Instructor"]').each(function() {
   var plainUriName = $(this).text().toLowerCase().capitalize();
@@ -75,17 +82,37 @@ $('td[data-th="Instructor"]').each(function() {
     // Get the prof's URI
     var uriName = encodeURIComponent(plainUriName).replace(/%20/, '+');
     // Change the name into a link
-    /*$(this).html('<a href="https://utdirect.utexas.edu/ctl/ecis/results' +
+    $(this).append(' (<a href="https://utdirect.utexas.edu/ctl/ecis/results' +
                    '/search.WBX?s_in_search_type_sw=N&s_in_max_nbr_return=10&' +
                    's_in_search_name=' +
                    uriName +
-                   '" target="_blank">' +
-                   $(this).text() +
-                   '</a>');*/
-    $(this).append('<span>  (<a href="https://utdirect.utexas.edu/ctl/ecis/results' +
-                   '/search.WBX?s_in_search_type_sw=N&s_in_max_nbr_return=10&' +
-                   's_in_search_name=' +
-                   uriName +
-                   '" target="_blank">CIS</a>)</span>');
+                   '" target="_blank">CIS</a>');
   }
+});
+
+// Identify the header tds
+$('td.course_header').each(function() {
+  $(this).parent().addClass('ch');
+});
+
+// Add syllabus link
+$('.ch').each(function() {
+  var header = $(this).text();
+  var sections = $(this).nextUntil('tr.ch').children('td[data-th="Instructor"]').each(function() {
+    // Set the prof's name
+    var profName = $(this).text()
+    if (profName !== "") {
+      // Split the name
+      var splitProfName = profName.split(", ")
+      // Set the link
+      $(this).append('/<a href="https://utdirect.utexas.edu/apps/student/coursedocs' +
+                     '/nlogon/?semester=&department=' + 
+                     dept + 
+                     '&course_number=' + 
+                     getCourseNumber(header) + 
+                     '&course_title=&unique=&instructor_first=&instructor_last=' +
+                     splitProfName[0] +
+                     '&course_type=In+Residence&search=Search" target="_blank">Syllabus</a>)');  
+    }
+  });
 });
