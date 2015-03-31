@@ -1,6 +1,36 @@
+/*
+The MIT License (MIT)
 
-// jQuery function to strip search string of args
-// Courtesy of http://www.sitepoint.com/url-parameters-jquery/
+Copyright (c) 2015 Ethan Perez
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+
+/**
+ * Returns the value of the paramater from a URL
+ * @param  {string} name Parameter name
+ * @return {string}      Parameter value
+ *
+ * jQuery function to strip search string of args
+ * Courtesy of http://www.sitepoint.com/url-parameters-jquery/
+ */
 function getURIParam(name) {
   var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
   if (results == null){
@@ -10,6 +40,11 @@ function getURIParam(name) {
   }
 }
 
+/**
+ * Returns the UT department from the Course Schedule URL
+ * @param  {string} uri Course schedule URL
+ * @return {string}     Three character department identifier
+ */
 function getDeptFromURI(uri) {
   // Get the department param, check 'em
   var dept = getURIParam(uri);
@@ -20,8 +55,14 @@ function getDeptFromURI(uri) {
   return dept;
 }
 
-dept = getDeptFromURI('fos_fl');
+// Assign department to global
+var dept = getDeptFromURI('fos_fl');
 
+/**
+ * Returns the UT course number from
+ * @param  {string} text String that contains the course name, number, and description
+ * @return {[type]}      [description]
+ */
 function getCourseNumber(text) {
   var spacedText = text.split(/\s+/)
 
@@ -34,8 +75,17 @@ function getCourseNumber(text) {
   }
 }
 
-
-
+/**
+ * Capitalizes the first letter of each word
+ * @return {string} Capitalized string
+ *
+ * Capitalizes the beginning of each word
+ *   http://stackoverflow.com/questions/4878756
+ *   javascript-how-to-capitalize-first-letter-of-each-word-like-a-2-word-city
+ */
+String.prototype.capitalize = function(){
+  return this.replace( /(^|\s)([a-z])/g , function(m,p1,p2){ return p1+p2.toUpperCase(); } );
+};
 
 // Figure out what the course number is
 // 
@@ -66,13 +116,6 @@ $("td.course_header h2").each(function() {
                  '&course_type=In+Residence&search=Search" target="_blank">View Syllabi and CVs</a>');
 });
 
-// Capitalizes the beginning of each word
-// http://stackoverflow.com/questions/4878756
-// /javascript-how-to-capitalize-first-letter-of-each-word-like-a-2-word-city
-String.prototype.capitalize = function(){
-  return this.replace( /(^|\s)([a-z])/g , function(m,p1,p2){ return p1+p2.toUpperCase(); } );
-};
-
 // Add link to CIS
 $('td[data-th="Instructor"]').each(function() {
   var plainUriName = $(this).text().toLowerCase().capitalize();
@@ -86,7 +129,7 @@ $('td[data-th="Instructor"]').each(function() {
                    '/search.WBX?s_in_search_type_sw=N&s_in_max_nbr_return=10&' +
                    's_in_search_name=' +
                    uriName +
-                   '" target="_blank">CIS</a>');
+                   '" target="_blank">Surveys</a>');
   }
 });
 
@@ -112,7 +155,7 @@ $('.ch').each(function() {
                      getCourseNumber(header) + 
                      '&course_title=&unique=&instructor_first=&instructor_last=' +
                      splitProfName[0] +
-                     '&course_type=In+Residence&search=Search" target="_blank">Syllabus</a>)');  
+                     '&course_type=In+Residence&search=Search" target="_blank">Syllabi</a>)');  
     }
   });
 });
