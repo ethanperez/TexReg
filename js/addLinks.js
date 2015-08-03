@@ -64,14 +64,14 @@ var dept = getDeptFromURI('fos_fl');
  * @return {[type]}      [description]
  */
 function getCourseNumber(text) {
-  var spacedText = text.split(/\s+/)
+  var spacedText = text.split(/\s+/).filter(Boolean)
 
   // Now, check to see where the c# starts
   var courseNumber;
   if (isNaN(spacedText[1].charAt(0)) == false) {
     return spacedText[1];
   } else {
-    return spacedText[3];
+    return spacedText[2];
   }
 }
 
