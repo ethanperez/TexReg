@@ -71,7 +71,7 @@ function getCourseNumber(text) {
   if (isNaN(spacedText[1].charAt(0)) == false) {
     return spacedText[1];
   } else {
-    return spacedText[2];
+    return spacedText[3];
   }
 }
 
